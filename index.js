@@ -20,10 +20,10 @@ app.post('/webhook', line.middleware(config), (req, res) => {
     .all(req.body.events.map(handleEvent))
     .then((result) => res.json(result))
     .catch((err) => {
-  console.error('Webhook error:', err);
-  res.status(200).send('OK'); // ← 一旦成功扱いで返して LINE の Verify 通す
+      console.error('Webhook error:', err);
+      res.status(200).send('OK'); // 一旦成功扱いで返して LINE の Verify 通す
+    });
 });
-
 
 function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text') {
@@ -40,4 +40,3 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`✅ LINE bot server is running on port ${port}`);
 });
-
