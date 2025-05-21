@@ -40,3 +40,4 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`✅ LINE bot server is running on port ${port}`);
 });
+
