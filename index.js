@@ -15,16 +15,7 @@ const client = new line.Client(config);
 
 app.use(bodyParser.json());
 
-app.post('/webhook', line.middleware(config), (req, res) => {
-  Promise
-    .all(req.body.events.map(handleEvent))
-    .then((result) => res.json(result))
-    .catch((err) => {
-      console.error('Webhook error:', err);
-      res.status(500).end();
-    });
-});
-
+// 🔽 handleEvent を先に定義する
 function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text') {
     return Promise.resolve(null);
@@ -35,6 +26,17 @@ function handleEvent(event) {
     text: `こうすけBot: 「${event.message.text}」って言ったね！`
   });
 }
+
+// 🔽 そのあとで POST ハンドラー
+app.post('/webhook', line.middleware(config), (req, res) => {
+  Promise
+    .all(req.body.events.map(handleEvent))
+    .then((result) => res.json(result))
+    .catch((err) => {
+      console.error('Webhook error:', err);
+      res.status(500).end();
+    });
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
